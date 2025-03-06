@@ -1,0 +1,72 @@
+1. Yocto Build Sequence:
+do_fetch: Fetches the source code from a specified location (e.g., git, tarball).
+do_unpack: Extracts the source code from the fetched tarball or archive.
+do_patch: Applies any patches specified in the recipe.
+do_configure: Configures the source code for the target platform.
+do_compile: Compiles the source code into binaries.
+do_install: Installs the compiled binaries and other files into a directory structure that will be packaged.
+do_package: Packages the installed files into the final output format (e.g., .ipk, .deb).
+do_rootfs: Assembles the root filesystem image.
+do_image: Creates the final image file (e.g., .img, .iso).
+
+2. What is a Metalayer?
+A metalayer is a collection of recipes, classes, and configurations that extend or modify the functionality of the Yocto Project. 
+It is used to add support for new hardware, software, or configurations.
+
+3. How to Add a New Layer?
+Use the bitbake-layers create-layer <layer-name> command to create a new layer.
+Add the new layer to your build by including it in bblayers.conf.
+Ensure the layer is compatible with your Yocto version by setting LAYERSERIES_COMPAT_<layer> in conf/layer.conf.
+
+4. Creating and Applying a Patch:
+Creating: Use git diff to generate a patch file after making changes to the source code.
+Applying: Use the SRC_URI variable in your recipe to apply the patch. For example: SRC_URI += "file://my_patch.patch".
+
+5. What is a Recipe?
+A recipe (.bb file) is a file that contains the instructions for fetching, configuring, compiling, and packaging a piece of software. 
+It defines where to get the source code, how to build it, and what to do with the result.
+
+6. How to Write a .bb File?
+A basic .bb file includes:
+DESCRIPTION: A brief description of the package.
+LICENSE: The license under which the software is distributed.
+SRC_URI: The location of the source code.
+S: The directory where the source code will be extracted.
+do_configure: Optional custom configuration steps.
+do_compile: Custom compilation steps.
+do_install: Steps to install the compiled binaries.
+
+7. What is .bbappend?
+A .bbappend file is used to extend or override the contents of an existing recipe. It allows you to modify an existing recipe without changing the original .bb file.
+
+8. How Layers are Configured?
+Layers are configured in bblayers.conf, where you list all the layers included in your build. This file is typically found in the conf directory of your Yocto build environment.
+
+9. How to Add or Remove a Layer While Building?
+Add: Include the layer in bblayers.conf and ensure it’s compatible with your Yocto version.
+Remove: Simply remove the layer from bblayers.conf and clean the build.
+
+10. How to Set Source Files?
+Source files are set using the SRC_URI variable in the .bb file. You specify the location of the source code (e.g., Git repository, tarball).
+
+11. How to Set Up an RDKV Build?
+Clone the RDKV repository.
+Set up the build environment using source oe-init-build-env.
+Configure your build by editing local.conf and bblayers.conf.
+Run bitbake <image-name> to start the build process.
+
+12. Add or Remove a Recipe?
+Add: Create a new .bb file in your layer and include it in the recipes-<category> directory.
+Remove: Remove the .bb file from your layer and clean the build using bitbake -c clean <recipe-name>.
+
+13. Conf and Class Files in RDKV?
+conf: Configuration files that set up the environment, such as local.conf and bblayers.conf.
+class: Files that provide common functionality for multiple recipes. These are included in recipes using the inherit keyword.
+
+14. How to Create Specific Images and Packaging?
+Customize your image by modifying the IMAGE_INSTALL variable in your image recipe (<image>.bb).
+Use the PACKAGE_CLASSES variable to define the package format (e.g., ipk, rpm, deb).
+
+15. How to List and See Available Packages and Newly Added Packages?
+Use bitbake -s to list available recipes and their versions.
+Newly added packages can be checked using bitbake -c listtasks <recipe> and ensuring your layer is included in bblayers.conf.
